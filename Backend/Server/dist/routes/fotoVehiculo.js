@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = require("express");
+const express_validator_1 = require("express-validator");
+const multers_1 = __importDefault(require("../libs/multers"));
+const controllers_1 = require("../controllers");
+const middlewares_1 = __importDefault(require("../middlewares"));
+const fotoVehiculo_1 = require("../controllers/fotoVehiculo");
+const { obtenerfotoVehiculos, obtenerfotoVehiculo, crearfotoVehiculo, actualizarfotoVehiculo, borrarfotoVehiculo, } = controllers_1.FotoVehiculo;
+const { validarCampos } = middlewares_1.default;
+const router = (0, express_1.Router)();
+exports.router = router;
+router.get('/', obtenerfotoVehiculos);
+router.get('/:id', (0, express_validator_1.check)('id', 'El ID de Mongo no es Valido').isMongoId(), validarCampos, obtenerfotoVehiculo);
+router.post('/', multers_1.default.single('imagen'), validarCampos, crearfotoVehiculo);
+router.put('/:idF', (0, express_validator_1.check)('idF', 'La fotoVehiculo con ese ID no esta registrada').isMongoId(), validarCampos, actualizarfotoVehiculo);
+router.delete('/:id', (0, express_validator_1.check)('id', 'La fotoVehiculo con ese ID no esta registrada').isMongoId(), validarCampos, borrarfotoVehiculo);
+router.get('/obtenerFoto/:id', fotoVehiculo_1.obtenerfotoVehiculosPorIDVehiculo);

@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  server:
+    build: ./Server
+    environment:
+      - MONGODB_CNN=mongodb://mongo:27017/test
+    depends_on:
+      - mongo
+  backendms:
+    build: ./backendMS
+    environment:
+      - MONGODB_CNN=mongodb://mongo:27017/test
+    depends_on:
+      - mongo
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - server
+      - backendms
+  mongo:
+    image: mongo
